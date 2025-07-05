@@ -1,0 +1,484 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cà Phê Memo - Hương Vị Truyền Thống</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="styles.css" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        'playfair': ['"Playfair Display"', 'serif'],
+                        'inter': ['Inter', 'sans-serif'],
+                    },
+                }
+            }
+        }
+    </script>
+</head>
+<body class="font-inter">
+    <!-- Navigation -->
+    <nav class="bg-white shadow-lg fixed w-full top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <div class="flex items-center">
+                    <i class="fas fa-coffee text-amber-600 text-2xl mr-2"></i>
+                    <span class="font-playfair text-2xl font-bold text-gray-800">Cà Phê Memo</span>
+                </div>
+                
+                <div class="hidden md:block">
+                    <div class="ml-10 flex items-baseline space-x-4">
+                        <a href="#home" class="nav-link text-gray-700 hover:text-amber-600 px-3 py-2 rounded-md text-sm font-medium transition-colors">Trang Chủ</a>
+                        <a href="#menu" class="nav-link text-gray-700 hover:text-amber-600 px-3 py-2 rounded-md text-sm font-medium transition-colors">Thực Đơn</a>
+                        <a href="#about" class="nav-link text-gray-700 hover:text-amber-600 px-3 py-2 rounded-md text-sm font-medium transition-colors">Về Chúng Tôi</a>
+                        <a href="#contact" class="nav-link text-gray-700 hover:text-amber-600 px-3 py-2 rounded-md text-sm font-medium transition-colors">Liên Hệ</a>
+                        
+                        <!-- Cart Button -->
+                        <button id="cart-btn" class="relative text-gray-700 hover:text-amber-600 px-3 py-2 rounded-md text-sm font-medium transition-colors">
+                            <i class="fas fa-shopping-cart text-xl"></i>
+                            <span id="cart-count" class="absolute -top-2 -right-2 bg-red-500 text-white text-xs font-bold rounded-full w-5 h-5 flex items-center justify-center">0</span>
+                        </button>
+                        
+                        <!-- Login Button -->
+                        <button id="login-btn" class="text-gray-700 hover:text-amber-600 px-3 py-2 rounded-md text-sm font-medium transition-colors">
+                            <i class="fas fa-user text-xl"></i>
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="md:hidden">
+                    <button id="mobile-menu-btn" class="text-gray-700 hover:text-amber-600">
+                        <i class="fas fa-bars text-xl"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Mobile menu -->
+        <div id="mobile-menu" class="md:hidden hidden bg-white border-t">
+            <div class="px-2 pt-2 pb-3 space-y-1 sm:px-3">
+                <a href="#home" class="block text-gray-700 hover:text-amber-600 px-3 py-2 rounded-md text-base font-medium">Trang Chủ</a>
+                <a href="#menu" class="block text-gray-700 hover:text-amber-600 px-3 py-2 rounded-md text-base font-medium">Thực Đơn</a>
+                <a href="#about" class="block text-gray-700 hover:text-amber-600 px-3 py-2 rounded-md text-base font-medium">Về Chúng Tôi</a>
+                <a href="#contact" class="block text-gray-700 hover:text-amber-600 px-3 py-2 rounded-md text-base font-medium">Liên Hệ</a>
+                
+                <!-- Mobile Cart Button -->
+                <button id="mobile-cart-btn" class="w-full text-left text-gray-700 hover:text-amber-600 px-3 py-2 rounded-md text-base font-medium">
+                    <i class="fas fa-shopping-cart mr-2"></i>Giỏ Hàng
+                    <span id="mobile-cart-count" class="ml-2 bg-red-500 text-white text-xs font-bold rounded-full w-5 h-5 inline-flex items-center justify-center">0</span>
+                </button>
+                
+                <!-- Mobile Login Button -->
+                <button id="mobile-login-btn" class="w-full text-left text-gray-700 hover:text-amber-600 px-3 py-2 rounded-md text-base font-medium">
+                    <i class="fas fa-user mr-2"></i>Đăng Nhập
+                </button>
+            </div>
+        </div>
+        
+        <!-- Cart Dropdown -->
+        <div id="cart-dropdown" class="hidden absolute right-0 top-full w-80 bg-white rounded-lg shadow-lg z-50 mt-2">
+            <div id="cart-items" class="max-h-96 overflow-y-auto p-4">
+                <!-- Cart items will be dynamically added here -->
+            </div>
+            <div class="border-t border-gray-200 p-4">
+                <div class="flex justify-between items-center font-bold text-gray-800">
+                    <span>Tổng cộng:</span>
+                    <span id="cart-total">0đ</span>
+                </div>
+                <button class="w-full mt-4 bg-amber-600 hover:bg-amber-700 text-white font-semibold py-2 px-4 rounded-md transition-colors">
+                    Thanh Toán
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Login Modal -->
+    <div id="login-modal" class="hidden fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center">
+        <div class="bg-white rounded-lg shadow-xl w-full max-w-md mx-4">
+            <div class="p-6">
+                <div class="flex justify-between items-center mb-6">
+                    <h2 class="font-playfair text-2xl font-bold text-gray-800">Đăng Nhập</h2>
+                    <button id="close-modal" class="text-gray-500 hover:text-gray-700 text-2xl">&times;</button>
+                </div>
+                <form id="login-form" class="space-y-4">
+                    <div>
+                        <label for="login-email" class="block text-sm font-medium text-gray-700 mb-2">Email</label>
+                        <input type="email" id="login-email" name="email" required 
+                               class="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-amber-500 focus:border-amber-500">
+                    </div>
+                    <div>
+                        <label for="login-password" class="block text-sm font-medium text-gray-700 mb-2">Mật Khẩu</label>
+                        <input type="password" id="login-password" name="password" required 
+                               class="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-amber-500 focus:border-amber-500">
+                    </div>
+                    <button type="submit" 
+                            class="w-full bg-amber-600 hover:bg-amber-700 text-white font-semibold py-2 px-4 rounded-md transition-colors">
+                        Đăng Nhập
+                    </button>
+                    <div class="text-center text-sm text-gray-600">
+                        <a href="#" class="hover:text-amber-600">Quên mật khẩu?</a>
+                        <span class="mx-2">|</span>
+                        <a href="#" class="hover:text-amber-600">Đăng ký tài khoản</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Hero Section -->
+    <section id="home" class="relative min-h-screen flex items-center justify-center text-white">
+        <div class="absolute inset-0 bg-cover bg-center bg-no-repeat" style="background-image: url('banner.jpg');">
+            <div class="absolute inset-0 bg-black bg-opacity-50"></div>
+        </div>
+        <div class="relative text-center px-4">
+            <h1 class="font-playfair text-5xl md:text-7xl font-bold mb-6 animate-fade-in">
+                Cà Phê Memo
+            </h1>
+            <p class="text-xl md:text-2xl mb-8 max-w-2xl mx-auto leading-relaxed">
+                Thưởng thức hương vị cà phê truyền thống Việt Nam với những công thức gia truyền được lưu truyền qua nhiều thế hệ
+            </p>
+            <button class="bg-amber-600 hover:bg-amber-700 text-white font-semibold py-4 px-8 rounded-full text-lg transition-all duration-300 transform hover:scale-105">
+                Khám Phá Thực Đơn
+            </button>
+        </div>
+    </section>
+
+    <!-- Featured Products -->
+    <section class="py-20 bg-gray-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16">
+                <h2 class="font-playfair text-4xl font-bold text-gray-800 mb-4">Sản Phẩm Nổi Bật</h2>
+                <p class="text-gray-600 text-lg max-w-2xl mx-auto">Những ly cà phê đặc biệt được pha chế từ những hạt cà phê chất lượng cao nhất</p>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div class="card-hover bg-white rounded-lg shadow-md overflow-hidden">
+                    <div class="h-64 bg-gradient-to-br from-amber-400 to-amber-600 flex items-center justify-center">
+                        <i class="fas fa-coffee text-white text-6xl"></i>
+                    </div>
+                    <div class="p-6">
+                        <h3 class="font-playfair text-2xl font-bold text-gray-800 mb-2">Cà Phê Đen Đá</h3>
+                        <p class="text-gray-600 mb-4">Hương vị đậm đà, đắng nhẹ của cà phê robusta nguyên chất</p>
+                        <div class="flex justify-between items-center">
+                            <span class="text-2xl font-bold text-amber-600">25.000đ</span>
+                            <button class="bg-amber-600 hover:bg-amber-700 text-white px-4 py-2 rounded-md transition-colors">
+                                Đặt Ngay
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="card-hover bg-white rounded-lg shadow-md overflow-hidden">
+                    <div class="h-64 bg-gradient-to-br from-amber-300 to-yellow-500 flex items-center justify-center">
+                        <i class="fas fa-glass-whiskey text-white text-6xl"></i>
+                    </div>
+                    <div class="p-6">
+                        <h3 class="font-playfair text-2xl font-bold text-gray-800 mb-2">Cà Phê Sữa Đá</h3>
+                        <p class="text-gray-600 mb-4">Sự kết hợp hoàn hảo giữa cà phê đậm đà và sữa đặc ngọt ngào</p>
+                        <div class="flex justify-between items-center">
+                            <span class="text-2xl font-bold text-amber-600">30.000đ</span>
+                            <button class="bg-amber-600 hover:bg-amber-700 text-white px-4 py-2 rounded-md transition-colors">
+                                Đặt Ngay
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="card-hover bg-white rounded-lg shadow-md overflow-hidden">
+                    <div class="h-64 bg-gradient-to-br from-yellow-400 to-orange-500 flex items-center justify-center">
+                        <i class="fas fa-mug-hot text-white text-6xl"></i>
+                    </div>
+                    <div class="p-6">
+                        <h3 class="font-playfair text-2xl font-bold text-gray-800 mb-2">Bạc Xỉu</h3>
+                        <p class="text-gray-600 mb-4">Cà phê nhẹ nhàng với nhiều sữa, phù hợp cho những ai thích vị ngọt</p>
+                        <div class="flex justify-between items-center">
+                            <span class="text-2xl font-bold text-amber-600">35.000đ</span>
+                            <button class="bg-amber-600 hover:bg-amber-700 text-white px-4 py-2 rounded-md transition-colors">
+                                Đặt Ngay
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Menu Section -->
+    <section id="menu" class="py-20 bg-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16">
+                <h2 class="font-playfair text-4xl font-bold text-gray-800 mb-4">Thực Đơn</h2>
+                <p class="text-gray-600 text-lg">Khám phá đầy đủ các loại cà phê và đồ uống của chúng tôi</p>
+            </div>
+            
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                <!-- Coffee Menu -->
+                <div>
+                    <h3 class="font-playfair text-2xl font-bold text-gray-800 mb-6 text-center">Cà Phê</h3>
+                    <div class="space-y-4">
+                        <div class="menu-item flex justify-between items-center p-4 rounded-lg border">
+                            <div>
+                                <h4 class="font-semibold text-gray-800">Cà Phê Đen Nóng</h4>
+                                <p class="text-gray-600 text-sm">Cà phê robusta nguyên chất, đậm đà</p>
+                            </div>
+                            <span class="font-bold text-amber-600">20.000đ</span>
+                        </div>
+                        
+                        <div class="menu-item flex justify-between items-center p-4 rounded-lg border">
+                            <div>
+                                <h4 class="font-semibold text-gray-800">Cà Phê Đen Đá</h4>
+                                <p class="text-gray-600 text-sm">Cà phê đen với đá, mát lạnh</p>
+                            </div>
+                            <span class="font-bold text-amber-600">25.000đ</span>
+                        </div>
+                        
+                        <div class="menu-item flex justify-between items-center p-4 rounded-lg border">
+                            <div>
+                                <h4 class="font-semibold text-gray-800">Cà Phê Sữa Nóng</h4>
+                                <p class="text-gray-600 text-sm">Cà phê với sữa đặc, thơm ngon</p>
+                            </div>
+                            <span class="font-bold text-amber-600">25.000đ</span>
+                        </div>
+                        
+                        <div class="menu-item flex justify-between items-center p-4 rounded-lg border">
+                            <div>
+                                <h4 class="font-semibold text-gray-800">Cà Phê Sữa Đá</h4>
+                                <p class="text-gray-600 text-sm">Cà phê sữa truyền thống với đá</p>
+                            </div>
+                            <span class="font-bold text-amber-600">30.000đ</span>
+                        </div>
+                        
+                        <div class="menu-item flex justify-between items-center p-4 rounded-lg border">
+                            <div>
+                                <h4 class="font-semibold text-gray-800">Bạc Xỉu</h4>
+                                <p class="text-gray-600 text-sm">Cà phê nhẹ với nhiều sữa</p>
+                            </div>
+                            <span class="font-bold text-amber-600">35.000đ</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Other Drinks -->
+                <div>
+                    <h3 class="font-playfair text-2xl font-bold text-gray-800 mb-6 text-center">Đồ Uống Khác</h3>
+                    <div class="space-y-4">
+                        <div class="menu-item flex justify-between items-center p-4 rounded-lg border">
+                            <div>
+                                <h4 class="font-semibold text-gray-800">Trà Đá</h4>
+                                <p class="text-gray-600 text-sm">Trà đá truyền thống, giải khát</p>
+                            </div>
+                            <span class="font-bold text-amber-600">10.000đ</span>
+                        </div>
+                        
+                        <div class="menu-item flex justify-between items-center p-4 rounded-lg border">
+                            <div>
+                                <h4 class="font-semibold text-gray-800">Trà Sữa</h4>
+                                <p class="text-gray-600 text-sm">Trà sữa thơm ngon, đậm đà</p>
+                            </div>
+                            <span class="font-bold text-amber-600">40.000đ</span>
+                        </div>
+                        
+                        <div class="menu-item flex justify-between items-center p-4 rounded-lg border">
+                            <div>
+                                <h4 class="font-semibold text-gray-800">Nước Cam Tươi</h4>
+                                <p class="text-gray-600 text-sm">Nước cam vắt tươi, vitamin C</p>
+                            </div>
+                            <span class="font-bold text-amber-600">35.000đ</span>
+                        </div>
+                        
+                        <div class="menu-item flex justify-between items-center p-4 rounded-lg border">
+                            <div>
+                                <h4 class="font-semibold text-gray-800">Sinh Tố Bơ</h4>
+                                <p class="text-gray-600 text-sm">Sinh tố bơ béo ngậy, bổ dưỡng</p>
+                            </div>
+                            <span class="font-bold text-amber-600">45.000đ</span>
+                        </div>
+                        
+                        <div class="menu-item flex justify-between items-center p-4 rounded-lg border">
+                            <div>
+                                <h4 class="font-semibold text-gray-800">Nước Dừa Tươi</h4>
+                                <p class="text-gray-600 text-sm">Nước dừa tươi mát, tự nhiên</p>
+                            </div>
+                            <span class="font-bold text-amber-600">25.000đ</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section id="about" class="py-20 bg-gray-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+                <div>
+                    <h2 class="font-playfair text-4xl font-bold text-gray-800 mb-6">Về Cà Phê Memo</h2>
+                    <p class="text-gray-600 text-lg mb-6 leading-relaxed">
+                        Được thành lập từ năm 2020, Cà Phê Memo đã trở thành một phần không thể thiếu trong văn hóa cà phê Việt Nam. 
+                        Chúng tôi tự hào mang đến cho khách hàng những ly cà phê chất lượng cao nhất với hương vị đậm đà, 
+                        đặc trưng của cà phê Việt Nam.
+                    </p>
+                    <p class="text-gray-600 text-lg mb-8 leading-relaxed">
+                        Với hơn 5 năm kinh nghiệm, chúng tôi đã hoàn thiện công thức pha chế độc đáo, 
+                        sử dụng những hạt cà phê robusta và arabica chất lượng cao từ các vùng trồng cà phê nổi tiếng của Việt Nam.
+                    </p>
+                    <div class="grid grid-cols-2 gap-6">
+                        <div class="text-center">
+                            <div class="text-3xl font-bold text-amber-600 mb-2">5+</div>
+                            <div class="text-gray-600">Năm Kinh Nghiệm</div>
+                        </div>
+                        <div class="text-center">
+                            <div class="text-3xl font-bold text-amber-600 mb-2">1000+</div>
+                            <div class="text-gray-600">Khách Hàng Hài Lòng</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="relative">
+                    <div class="bg-gradient-to-br from-amber-400 to-amber-600 rounded-lg h-96 flex items-center justify-center">
+                        <i class="fas fa-store text-white text-8xl"></i>
+                    </div>
+                    <div class="absolute -bottom-6 -right-6 bg-white rounded-lg p-6 shadow-lg">
+                        <div class="flex items-center">
+                            <i class="fas fa-star text-yellow-400 text-xl mr-2"></i>
+                            <div>
+                                <div class="font-bold text-gray-800">4.8/5</div>
+                                <div class="text-gray-600 text-sm">Đánh Giá</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact" class="py-20 bg-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16">
+                <h2 class="font-playfair text-4xl font-bold text-gray-800 mb-4">Liên Hệ</h2>
+                <p class="text-gray-600 text-lg">Hãy ghé thăm chúng tôi hoặc liên hệ để biết thêm thông tin</p>
+            </div>
+            
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-12">
+                <div>
+                    <h3 class="font-playfair text-2xl font-bold text-gray-800 mb-6">Thông Tin Liên Hệ</h3>
+                    <div class="space-y-6">
+                        <div class="flex items-start">
+                            <i class="fas fa-map-marker-alt text-amber-600 text-xl mr-4 mt-1"></i>
+                            <div>
+                                <h4 class="font-semibold text-gray-800 mb-1">Địa Chỉ</h4>
+                                <p class="text-gray-600">123 Đường Hoàng Quốc Việt,Cầu Giấy, TP. Hà Nội</p>
+                            </div>
+                        </div>
+                        
+                        <div class="flex items-start">
+                            <i class="fas fa-phone text-amber-600 text-xl mr-4 mt-1"></i>
+                            <div>
+                                <h4 class="font-semibold text-gray-800 mb-1">Điện Thoại</h4>
+                                <p class="text-gray-600">0123 456 789</p>
+                            </div>
+                        </div>
+                        
+                        <div class="flex items-start">
+                            <i class="fas fa-envelope text-amber-600 text-xl mr-4 mt-1"></i>
+                            <div>
+                                <h4 class="font-semibold text-gray-800 mb-1">Email</h4>
+                                <p class="text-gray-600">info@caphe-memo.com</p>
+                            </div>
+                        </div>
+                        
+                        <div class="flex items-start">
+                            <i class="fas fa-clock text-amber-600 text-xl mr-4 mt-1"></i>
+                            <div>
+                                <h4 class="font-semibold text-gray-800 mb-1">Giờ Mở Cửa</h4>
+                                <p class="text-gray-600">Thứ 2 - Chủ Nhật: 6:00 - 22:00</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div>
+                    <h3 class="font-playfair text-2xl font-bold text-gray-800 mb-6">Gửi Tin Nhắn</h3>
+                    <form id="contact-form" class="space-y-6">
+                        <div>
+                            <label for="name" class="block text-sm font-medium text-gray-700 mb-2">Họ Tên</label>
+                            <input type="text" id="name" name="name" required 
+                                   class="w-full px-4 py-3 border border-gray-300 rounded-md focus:ring-amber-500 focus:border-amber-500">
+                        </div>
+                        
+                        <div>
+                            <label for="email" class="block text-sm font-medium text-gray-700 mb-2">Email</label>
+                            <input type="email" id="email" name="email" required 
+                                   class="w-full px-4 py-3 border border-gray-300 rounded-md focus:ring-amber-500 focus:border-amber-500">
+                        </div>
+                        
+                        <div>
+                            <label for="message" class="block text-sm font-medium text-gray-700 mb-2">Tin Nhắn</label>
+                            <textarea id="message" name="message" rows="4" required 
+                                      class="w-full px-4 py-3 border border-gray-300 rounded-md focus:ring-amber-500 focus:border-amber-500"></textarea>
+                        </div>
+                        
+                        <button type="submit" 
+                                class="w-full bg-amber-600 hover:bg-amber-700 text-white font-semibold py-3 px-6 rounded-md transition-colors">
+                            Gửi Tin Nhắn
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-gray-800 text-white py-12">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div>
+                    <div class="flex items-center mb-4">
+                        <i class="fas fa-coffee text-amber-600 text-2xl mr-2"></i>
+                        <span class="font-playfair text-2xl font-bold">Cà Phê Memo</span>
+                    </div>
+                    <p class="text-gray-300 leading-relaxed">
+                        Mang đến hương vị cà phê Việt Nam đậm đà, truyền thống với chất lượng tốt nhất.
+                    </p>
+                </div>
+                
+                <div>
+                    <h3 class="font-semibold text-lg mb-4">Liên Kết Nhanh</h3>
+                    <ul class="space-y-2">
+                        <li><a href="#home" class="text-gray-300 hover:text-amber-600 transition-colors">Trang Chủ</a></li>
+                        <li><a href="#menu" class="text-gray-300 hover:text-amber-600 transition-colors">Thực Đơn</a></li>
+                        <li><a href="#about" class="text-gray-300 hover:text-amber-600 transition-colors">Về Chúng Tôi</a></li>
+                        <li><a href="#contact" class="text-gray-300 hover:text-amber-600 transition-colors">Liên Hệ</a></li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h3 class="font-semibold text-lg mb-4">Theo Dõi Chúng Tôi</h3>
+                    <div class="flex space-x-4">
+                        <a href="#" class="text-gray-300 hover:text-amber-600 transition-colors">
+                            <i class="fab fa-facebook text-2xl"></i>
+                        </a>
+                        <a href="#" class="text-gray-300 hover:text-amber-600 transition-colors">
+                            <i class="fab fa-instagram text-2xl"></i>
+                        </a>
+                        <a href="#" class="text-gray-300 hover:text-amber-600 transition-colors">
+                            <i class="fab fa-youtube text-2xl"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="border-t border-gray-700 mt-8 pt-8 text-center">
+                <p class="text-gray-300">&copy; 2024 Cà Phê Memo. Tất cả quyền được bảo lưu.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>

@@ -1,0 +1,996 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard Quản Lý Quán Cafe</title>
+    <link rel="stylesheet" href="assets/css/styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+    <div class="dashboard">
+        <!-- Navigation Switch Button -->
+        <button class="nav-switch" onclick="switchNavigation()" title="Chuyển đổi navigation">
+            <i class="fas fa-bars"></i>
+        </button>
+        
+        <!-- Mobile Top Navigation -->
+        <nav class="mobile-nav" id="mobileNav">
+            <div class="mobile-nav-header">
+                <div class="mobile-nav-logo">
+                    <i class="fas fa-coffee"></i>
+                    Coffee Manager
+                </div>
+                <button class="mobile-nav-toggle" onclick="toggleMobileNav()">
+                    <i class="fas fa-bars"></i>
+                </button>
+            </div>
+            <div class="mobile-nav-menu" id="mobileNavMenu">
+                <ul>
+                    <li><a href="#" data-section="overview"><i class="fas fa-chart-line"></i> Tổng quan</a></li>
+                    <li><a href="#" data-section="users"><i class="fas fa-users-cog"></i> Tài khoản</a></li>
+                    <li><a href="#" data-section="employees"><i class="fas fa-user-tie"></i> Nhân viên</a></li>
+                    <li><a href="#" data-section="shifts"><i class="fas fa-clock"></i> Ca làm việc</a></li>
+                    <li><a href="#" data-section="drinks"><i class="fas fa-mug-hot"></i> Thức uống</a></li>
+                    <li><a href="#" data-section="recipes"><i class="fas fa-book"></i> Công thức</a></li>
+                    <li><a href="#" data-section="ingredients"><i class="fas fa-boxes"></i> Nguyên liệu</a></li>
+                    <li><a href="#" data-section="invoices"><i class="fas fa-receipt"></i> Hóa đơn</a></li>
+                    <li><a href="#" data-section="customers"><i class="fas fa-user-friends"></i> Khách hàng</a></li>
+                    <li><a href="#" data-section="orders"><i class="fas fa-shopping-cart"></i> Đơn online</a></li>
+                </ul>
+            </div>
+        </nav>
+        
+        <!-- Bottom Navigation -->
+        <nav class="bottom-nav" id="bottomNav">
+            <div class="bottom-nav-grid">
+                <a href="#" class="bottom-nav-item active" data-section="overview">
+                    <i class="fas fa-chart-line"></i>
+                    <span>Tổng quan</span>
+                </a>
+                <a href="#" class="bottom-nav-item" data-section="employees">
+                    <i class="fas fa-user-tie"></i>
+                    <span>Nhân viên</span>
+                </a>
+                <a href="#" class="bottom-nav-item" data-section="drinks">
+                    <i class="fas fa-mug-hot"></i>
+                    <span>Menu</span>
+                </a>
+                <a href="#" class="bottom-nav-item" data-section="invoices">
+                    <i class="fas fa-receipt"></i>
+                    <span>Hóa đơn</span>
+                </a>
+                <a href="#" class="bottom-nav-item" data-section="customers">
+                    <i class="fas fa-user-friends"></i>
+                    <span>Khách hàng</span>
+                </a>
+            </div>
+        </nav>
+        
+        <!-- Sidebar Overlay -->
+        <div class="sidebar-overlay"></div>
+        
+        <!-- Sidebar -->
+        <nav class="sidebar">
+            <div class="sidebar-header">
+                <h2 id="app-logo" style="cursor: pointer;"><i class="fas fa-coffee"></i> Coffee Manager</h2>
+            </div>
+            <ul class="sidebar-menu">
+                <li><a href="#" data-section="users"><i class="fas fa-users-cog"></i> Tài khoản</a></li>
+                <li><a href="#" data-section="employees"><i class="fas fa-user-tie"></i> Nhân viên</a></li>
+                <li><a href="#" data-section="shifts"><i class="fas fa-clock"></i> Ca làm việc</a></li>
+                <li><a href="#" data-section="drinks"><i class="fas fa-mug-hot"></i> Thức uống</a></li>
+                <li><a href="#" data-section="recipes"><i class="fas fa-book"></i> Công thức</a></li>
+                <li><a href="#" data-section="ingredients"><i class="fas fa-boxes"></i> Nguyên liệu</a></li>
+                <li><a href="#" data-section="invoices"><i class="fas fa-receipt"></i> Hóa đơn</a></li>
+                <li><a href="#" data-section="customers"><i class="fas fa-user-friends"></i> Khách hàng</a></li>
+                <li><a href="#" data-section="orders"><i class="fas fa-shopping-cart"></i> Đơn online</a></li>
+            </ul>
+        </nav>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <header class="header">
+                <div class="header-left">
+                    <button class="sidebar-toggle"><i class="fas fa-bars"></i></button>
+                    <h1 id="page-title">Tổng quan</h1>
+                </div>
+                <div class="header-right">
+                    <div class="user-info">
+                        <span>Xin chào, Admin</span>
+                        <i class="fas fa-user-circle"></i>
+                    </div>
+                </div>
+            </header>
+
+            <div class="content">
+                <!-- Overview Section -->
+                <section id="overview" class="section active">
+
+                    <!-- Revenue & Performance Stats -->
+                    <div class="revenue-grid">
+                        <div class="revenue-card">
+                            <div class="revenue-header">
+                                <h4>Doanh thu hôm nay</h4>
+                                <span class="revenue-icon"><i class="fas fa-chart-line"></i></span>
+                            </div>
+                            <div class="revenue-amount" id="today-revenue">0 VND</div>
+                            <div class="revenue-info">
+                                <span class="revenue-change positive" id="revenue-change">+0%</span>
+                                <span>so với hôm qua</span>
+                            </div>
+                        </div>
+
+                        <div class="revenue-card">
+                            <div class="revenue-header">
+                                <h4>Đơn hàng online</h4>
+                                <span class="revenue-icon"><i class="fas fa-shopping-cart"></i></span>
+                            </div>
+                            <div class="revenue-amount" id="total-orders">0</div>
+                            <div class="revenue-info">
+                                <span class="revenue-change" id="orders-change">+0</span>
+                                <span>hôm nay</span>
+                            </div>
+                        </div>
+
+                        <div class="revenue-card">
+                            <div class="revenue-header">
+                                <h4>Khách hàng thân thiết</h4>
+                                <span class="revenue-icon"><i class="fas fa-crown"></i></span>
+                            </div>
+                            <div class="revenue-amount" id="vip-customers">0</div>
+                            <div class="revenue-info">
+                                <span class="revenue-change" id="vip-change">điểm tích lũy cao</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Quick Actions & Recent Activity -->
+                    <div class="dashboard-row">
+                        <div class="quick-actions">
+                            <h4>Thao tác nhanh</h4>
+                            <div class="action-buttons">
+                                <button class="action-btn" onclick="openModal('employeeModal')">
+                                    <i class="fas fa-user-plus"></i>
+                                    <span>Thêm nhân viên</span>
+                                </button>
+                                <button class="action-btn" onclick="openModal('drinkModal')">
+                                    <i class="fas fa-plus-circle"></i>
+                                    <span>Thêm thức uống</span>
+                                </button>
+                                <button class="action-btn" onclick="openModal('invoiceModal')">
+                                    <i class="fas fa-receipt"></i>
+                                    <span>Tạo hóa đơn</span>
+                                </button>
+                                <button class="action-btn" onclick="openModal('customerModal')">
+                                    <i class="fas fa-user-friends"></i>
+                                    <span>Thêm khách hàng</span>
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="recent-activity">
+                            <h4>Hoạt động gần đây</h4>
+                            <div class="activity-list" id="recent-activities">
+                                <div class="activity-item">
+                                    <div class="activity-icon"><i class="fas fa-receipt"></i></div>
+                                    <div class="activity-content">
+                                        <p>Hóa đơn mới được tạo</p>
+                                        <small>2 phút trước</small>
+                                    </div>
+                                </div>
+                                <div class="activity-item">
+                                    <div class="activity-icon"><i class="fas fa-user-plus"></i></div>
+                                    <div class="activity-content">
+                                        <p>Khách hàng mới đăng ký</p>
+                                        <small>15 phút trước</small>
+                                    </div>
+                                </div>
+                                <div class="activity-item">
+                                    <div class="activity-icon"><i class="fas fa-shopping-cart"></i></div>
+                                    <div class="activity-content">
+                                        <p>Đơn hàng online mới</p>
+                                        <small>30 phút trước</small>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Data Tables Summary -->
+                    <div class="data-summary">
+                        <h4>Tổng quan dữ liệu</h4>
+                        <div class="summary-tabs">
+                            <button class="tab-btn active" onclick="showSummaryTab('employees-summary')">Nhân viên</button>
+                            <button class="tab-btn" onclick="showSummaryTab('drinks-summary')">Thức uống</button>
+                            <button class="tab-btn" onclick="showSummaryTab('revenue-summary')">Doanh thu</button>
+                            <button class="tab-btn" onclick="showSummaryTab('raw-data')">Dữ liệu thô</button>
+                        </div>
+
+                        <div id="employees-summary" class="summary-content active">
+                            <div class="summary-stats">
+                                <div class="summary-item">
+                                    <span class="summary-label">Nhân viên toàn thời gian:</span>
+                                    <span class="summary-value" id="fulltime-employees">0</span>
+                                </div>
+                                <div class="summary-item">
+                                    <span class="summary-label">Nhân viên bán thời gian:</span>
+                                    <span class="summary-value" id="parttime-employees">0</span>
+                                </div>
+                                <div class="summary-item">
+                                    <span class="summary-label">Tổng chi phí lương:</span>
+                                    <span class="summary-value" id="total-salary">0 VND</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div id="drinks-summary" class="summary-content">
+                            <div class="summary-stats">
+                                <div class="summary-item">
+                                    <span class="summary-label">Cà phê:</span>
+                                    <span class="summary-value" id="coffee-count">0</span>
+                                </div>
+                                <div class="summary-item">
+                                    <span class="summary-label">Trà:</span>
+                                    <span class="summary-value" id="tea-count">0</span>
+                                </div>
+                                <div class="summary-item">
+                                    <span class="summary-label">Đồ uống khác:</span>
+                                    <span class="summary-value" id="other-drinks-count">0</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div id="revenue-summary" class="summary-content">
+                            <div class="summary-stats">
+                                <div class="summary-item">
+                                    <span class="summary-label">Doanh thu tuần này:</span>
+                                    <span class="summary-value" id="week-revenue">0 VND</span>
+                                </div>
+                                <div class="summary-item">
+                                    <span class="summary-label">Doanh thu tháng này:</span>
+                                    <span class="summary-value" id="month-revenue">0 VND</span>
+                                </div>
+                                <div class="summary-item">
+                                    <span class="summary-label">Hóa đơn trung bình:</span>
+                                    <span class="summary-value" id="avg-invoice">0 VND</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div id="raw-data" class="summary-content">
+                            <div class="raw-data-container">
+                                <textarea id="raw-data-display" readonly placeholder="Dữ liệu thô sẽ hiển thị ở đây..."></textarea>
+                                <button class="btn btn-secondary" onclick="exportRawData()">Xuất dữ liệu</button>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Employees Section -->
+                <section id="employees" class="section">
+                    <div class="section-header">
+                        <h2>Quản lý nhân viên</h2>
+                        <button class="btn btn-primary" onclick="openModal('employeeModal')">
+                            <i class="fas fa-plus"></i> Thêm nhân viên
+                        </button>
+                    </div>
+                    <div class="table-container">
+                        <table id="employeesTable">
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Họ tên</th>
+                                    <th>Số điện thoại</th>
+                                    <th>Email</th>
+                                    <th>Chức vụ</th>
+                                    <th>Lương</th>
+                                    <th>Thao tác</th>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
+                </section>
+
+                <!-- Shifts Section -->
+                <section id="shifts" class="section">
+                    <div class="section-header">
+                        <h2>Quản lý ca làm việc</h2>
+                        <button class="btn btn-primary" onclick="openModal('shiftModal')">
+                            <i class="fas fa-plus"></i> Thêm ca làm việc
+                        </button>
+                    </div>
+                    <div class="table-container">
+                        <table id="shiftsTable">
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Nhân viên</th>
+                                    <th>Ngày</th>
+                                    <th>Giờ bắt đầu</th>
+                                    <th>Giờ kết thúc</th>
+                                    <th>Loại ca</th>
+                                    <th>Thao tác</th>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
+                </section>
+
+                <!-- Drinks Section -->
+                <section id="drinks" class="section">
+                    <div class="section-header">
+                        <h2>Quản lý thức uống</h2>
+                        <button class="btn btn-primary" onclick="openModal('drinkModal')">
+                            <i class="fas fa-plus"></i> Thêm thức uống
+                        </button>
+                    </div>
+                    <div class="table-container">
+                        <table id="drinksTable">
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Tên</th>
+                                    <th>Danh mục</th>
+                                    <th>Giá</th>
+                                    <th>Size</th>
+                                    <th>Trạng thái</th>
+                                    <th>Thao tác</th>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
+                </section>
+
+                <!-- Recipes Section -->
+                <section id="recipes" class="section">
+                    <div class="section-header">
+                        <h2>Quản lý công thức</h2>
+                        <button class="btn btn-primary" onclick="openModal('recipeModal')">
+                            <i class="fas fa-plus"></i> Thêm công thức
+                        </button>
+                    </div>
+                    <div class="table-container">
+                        <table id="recipesTable">
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Thức uống</th>
+                                    <th>Thời gian chuẩn bị</th>
+                                    <th>Các bước</th>
+                                    <th>Thao tác</th>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
+                </section>
+
+                <!-- Ingredients Section -->
+                <section id="ingredients" class="section">
+                    <div class="section-header">
+                        <h2>Quản lý nguyên liệu</h2>
+                        <button class="btn btn-primary" onclick="openModal('ingredientModal')">
+                            <i class="fas fa-plus"></i> Thêm nguyên liệu
+                        </button>
+                    </div>
+                    <div class="table-container">
+                        <table id="ingredientsTable">
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Tên</th>
+                                    <th>Đơn vị</th>
+                                    <th>Số lượng tồn</th>
+                                    <th>Nhà cung cấp</th>
+                                    <th>Cập nhật cuối</th>
+                                    <th>Thao tác</th>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
+                </section>
+
+                <!-- Invoices Section -->
+                <section id="invoices" class="section">
+                    <div class="section-header">
+                        <h2>Quản lý hóa đơn</h2>
+                        <button class="btn btn-primary" onclick="openModal('invoiceModal')">
+                            <i class="fas fa-plus"></i> Thêm hóa đơn
+                        </button>
+                    </div>
+                    <div class="table-container">
+                        <table id="invoicesTable">
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Nhân viên</th>
+                                    <th>Khách hàng</th>
+                                    <th>Số điện thoại</th>
+                                    <th>Tổng tiền</th>
+                                    <th>Giảm giá</th>
+                                    <th>Thanh toán</th>
+                                    <th>Loại hóa đơn</th>
+                                    <th>Thời gian</th>
+                                    <th>Thao tác</th>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
+                </section>
+
+                <!-- Customers Section -->
+                <section id="customers" class="section">
+                    <div class="section-header">
+                        <h2>Quản lý khách hàng</h2>
+                        <button class="btn btn-primary" onclick="openModal('customerModal')">
+                            <i class="fas fa-plus"></i> Thêm khách hàng
+                        </button>
+                    </div>
+                    <div class="table-container">
+                        <table id="customersTable">
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Tên & Loại</th>
+                                    <th>Điện thoại</th>
+                                    <th>Email</th>
+                                    <th>Ngày sinh</th>
+                                    <th>Điểm tích lũy</th>
+                                    <th>Nguồn</th>
+                                    <th>Trạng thái</th>
+                                    <th>Thao tác</th>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
+                </section>
+
+                <!-- Orders Section -->
+                <section id="orders" class="section">
+                    <div class="section-header">
+                        <h2>Quản lý đơn hàng online</h2>
+                        <button class="btn btn-primary" onclick="openModal('orderModal')">
+                            <i class="fas fa-plus"></i> Thêm đơn hàng
+                        </button>
+                    </div>
+                    <div class="table-container">
+                        <table id="ordersTable">
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Khách hàng</th>
+                                    <th>Số điện thoại</th>
+                                    <th>Địa chỉ giao</th>
+                                    <th>Tổng tiền</th>
+                                    <th>Trạng thái</th>
+                                    <th>Thanh toán</th>
+                                    <th>Thời gian</th>
+                                    <th>Thao tác</th>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
+                </section>
+
+                <!-- Users Section -->
+                <section id="users" class="section">
+                    <div class="section-header">
+                        <h2>Quản lý tài khoản</h2>
+                        <button class="btn btn-primary" onclick="openModal('userModal')">
+                            <i class="fas fa-plus"></i> Thêm tài khoản
+                        </button>
+                    </div>
+                    <div class="table-container">
+                        <table id="usersTable">
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Tên đăng nhập</th>
+                                    <th>Vai trò</th>
+                                    <th>Trạng thái</th>
+                                    <th>Ngày tạo</th>
+                                    <th>Đăng nhập cuối</th>
+                                    <th>Thao tác</th>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
+                </section>
+            </div>
+        </main>
+    </div>
+
+    <!-- Notification Modal -->
+    <div id="notificationModal" class="notification-modal">
+        <div class="notification-content">
+            <div class="notification-icon">
+                <i id="notificationIcon"></i>
+            </div>
+            <div class="notification-message">
+                <h3 id="notificationTitle"></h3>
+                <p id="notificationText"></p>
+            </div>
+            <div class="notification-progress" id="notificationProgress"></div>
+        </div>
+    </div>
+
+    <!-- Confirmation Modal -->
+    <div id="confirmModal" class="modal">
+        <div class="modal-content confirm-modal">
+            <div class="modal-header">
+                <h3 id="confirmTitle">
+                    <i class="fas fa-shield-alt"></i>
+                    Xác nhận
+                </h3>
+                <span class="close" onclick="closeConfirmModal()">&times;</span>
+            </div>
+            <div class="modal-body">
+                <div class="confirm-icon">
+                    <i class="fas fa-exclamation-triangle"></i>
+                </div>
+                <div class="confirm-message">
+                    <p id="confirmMessage">Bạn có chắc chắn muốn thực hiện hành động này?</p>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" onclick="closeConfirmModal()">
+                    <i class="fas fa-times"></i> Hủy
+                </button>
+                <button type="button" class="btn btn-danger" id="confirmButton">
+                    <i class="fas fa-trash"></i> Xóa
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modals -->
+    <!-- User Modal -->
+    <div id="userModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Thêm/Sửa tài khoản</h3>
+                <span class="close" onclick="closeModal('userModal')">&times;</span>
+            </div>
+            <form id="userForm">
+                <input type="hidden" id="userId">
+                <div class="form-group">
+                    <label>Tên đăng nhập:</label>
+                    <input type="text" id="username" required>
+                </div>
+                <div class="form-group">
+                    <label>Mật khẩu:</label>
+                    <input type="password" id="password" required>
+                </div>
+                <div class="form-group">
+                    <label>Vai trò:</label>
+                    <select id="role" required>
+                        <option value="admin">Admin</option>
+                        <option value="manager">Quản lý</option>
+                        <option value="employee">Nhân viên</option>
+                        <option value="customer">Khách hàng</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Trạng thái:</label>
+                    <select id="status">
+                        <option value="active">Hoạt động</option>
+                        <option value="inactive">Không hoạt động</option>
+                    </select>
+                </div>
+                <div class="form-actions">
+                    <button type="submit" class="btn btn-primary">Lưu</button>
+                    <button type="button" class="btn btn-secondary" onclick="closeModal('userModal')">Hủy</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Employee Modal -->
+    <div id="employeeModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Thêm/Sửa nhân viên</h3>
+                <span class="close" onclick="closeModal('employeeModal')">&times;</span>
+            </div>
+            <form id="employeeForm">
+                <input type="hidden" id="employeeId">
+                <div class="form-group">
+                    <label>Họ tên:</label>
+                    <input type="text" id="fullName" required>
+                </div>
+                <div class="form-group">
+                    <label>Ngày sinh:</label>
+                    <input type="date" id="birthDate">
+                </div>
+                <div class="form-group">
+                    <label>Điện thoại:</label>
+                    <input type="tel" id="phone">
+                </div>
+                <div class="form-group">
+                    <label>Email:</label>
+                    <input type="email" id="email">
+                </div>
+                <div class="form-group">
+                    <label>Chức vụ:</label>
+                    <input type="text" id="position">
+                </div>
+                <div class="form-group">
+                    <label>Ngày vào làm:</label>
+                    <input type="date" id="hireDate">
+                </div>
+                <div class="form-group">
+                    <label>Địa chỉ:</label>
+                    <textarea id="address"></textarea>
+                </div>
+                <div class="form-group">
+                    <label>Lương:</label>
+                    <input type="number" id="salary" step="0.01">
+                </div>
+                <div class="form-actions">
+                    <button type="submit" class="btn btn-primary">Lưu</button>
+                    <button type="button" class="btn btn-secondary" onclick="closeModal('employeeModal')">Hủy</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Shift Modal -->
+    <div id="shiftModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Thêm/Sửa ca làm việc</h3>
+                <span class="close" onclick="closeModal('shiftModal')">&times;</span>
+            </div>
+            <form id="shiftForm">
+                <input type="hidden" id="shiftId">
+                <div class="form-group">
+                    <label>Nhân viên:</label>
+                    <select id="shiftEmployeeId" required></select>
+                </div>
+                <div class="form-group">
+                    <label>Ngày:</label>
+                    <input type="date" id="shiftDate" required>
+                </div>
+                <div class="form-group">
+                    <label>Giờ bắt đầu:</label>
+                    <input type="time" id="startTime" required>
+                </div>
+                <div class="form-group">
+                    <label>Giờ kết thúc:</label>
+                    <input type="time" id="endTime" required>
+                </div>
+                <div class="form-group">
+                    <label>Loại ca:</label>
+                    <select id="shiftType">
+                        <option value="morning">Ca sáng</option>
+                        <option value="day">Ca ngày</option>
+                        <option value="evening">Ca chiều</option>
+                        <option value="night">Ca đêm</option>
+                        <option value="normal">Bình thường</option>
+                        <option value="overtime">Tăng ca</option>
+                        <option value="holiday">Ngày lễ</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Ghi chú:</label>
+                    <textarea id="shiftNote"></textarea>
+                </div>
+                <div class="form-actions">
+                    <button type="submit" class="btn btn-primary">Lưu</button>
+                    <button type="button" class="btn btn-secondary" onclick="closeModal('shiftModal')">Hủy</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Drink Modal -->
+    <div id="drinkModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Thêm/Sửa thức uống</h3>
+                <span class="close" onclick="closeModal('drinkModal')">&times;</span>
+            </div>
+            <form id="drinkForm">
+                <input type="hidden" id="drinkId">
+                <div class="form-group">
+                    <label>Tên thức uống:</label>
+                    <input type="text" id="drinkName" required>
+                </div>
+                <div class="form-group">
+                    <label>Danh mục:</label>
+                    <select id="category">
+                        <option value="coffee">Cà phê</option>
+                        <option value="tea">Trà</option>
+                        <option value="juice">Nước ép</option>
+                        <option value="smoothie">Sinh tố</option>
+                        <option value="other">Khác</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Giá:</label>
+                    <input type="number" id="price" step="0.01" required>
+                </div>
+                <div class="form-group">
+                    <label>Size:</label>
+                    <select id="size">
+                        <option value="small">Nhỏ</option>
+                        <option value="medium">Vừa</option>
+                        <option value="large">Lớn</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Mô tả:</label>
+                    <textarea id="description"></textarea>
+                </div>
+                <div class="form-group">
+                    <label>
+                        <input type="checkbox" id="isAvailable"> Có sẵn
+                    </label>
+                </div>
+                <div class="form-actions">
+                    <button type="submit" class="btn btn-primary">Lưu</button>
+                    <button type="button" class="btn btn-secondary" onclick="closeModal('drinkModal')">Hủy</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Recipe Modal -->
+    <div id="recipeModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Thêm/Sửa công thức</h3>
+                <span class="close" onclick="closeModal('recipeModal')">&times;</span>
+            </div>
+            <form id="recipeForm">
+                <input type="hidden" id="recipeId">
+                <div class="form-group">
+                    <label>Thức uống:</label>
+                    <select id="recipeDrinkId" required></select>
+                </div>
+                <div class="form-group">
+                    <label>Thời gian chuẩn bị (phút):</label>
+                    <input type="number" id="preparationTime">
+                </div>
+                <div class="form-group">
+                    <label>Các bước thực hiện:</label>
+                    <textarea id="steps" rows="5"></textarea>
+                </div>
+                <div class="form-actions">
+                    <button type="submit" class="btn btn-primary">Lưu</button>
+                    <button type="button" class="btn btn-secondary" onclick="closeModal('recipeModal')">Hủy</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Ingredient Modal -->
+    <div id="ingredientModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Thêm/Sửa nguyên liệu</h3>
+                <span class="close" onclick="closeModal('ingredientModal')">&times;</span>
+            </div>
+            <form id="ingredientForm">
+                <input type="hidden" id="ingredientId">
+                <div class="form-group">
+                    <label>Tên nguyên liệu:</label>
+                    <input type="text" id="ingredientName" required>
+                </div>
+                <div class="form-group">
+                    <label>Đơn vị:</label>
+                    <input type="text" id="unit">
+                </div>
+                <div class="form-group">
+                    <label>Số lượng tồn kho:</label>
+                    <input type="number" id="quantityInStock" step="0.01">
+                </div>
+                <div class="form-group">
+                    <label>Nhà cung cấp:</label>
+                    <input type="text" id="supplier">
+                </div>
+                <div class="form-actions">
+                    <button type="submit" class="btn btn-primary">Lưu</button>
+                    <button type="button" class="btn btn-secondary" onclick="closeModal('ingredientModal')">Hủy</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Invoice Modal -->
+    <div id="invoiceModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Thêm/Sửa hóa đơn</h3>
+                <span class="close" onclick="closeModal('invoiceModal')">&times;</span>
+            </div>
+            <form id="invoiceForm">
+                <input type="hidden" id="invoiceId">
+                <div class="form-group">
+                    <label>Nhân viên:</label>
+                    <select id="invoiceEmployeeId" required></select>
+                </div>
+                <div class="form-group">
+                    <label>Khách hàng thành viên:</label>
+                    <select id="invoiceCustomerId" onchange="handleCustomerSelect(this)">
+                        <option value="">Khách lẻ</option>
+                    </select>
+                    <small style="color: #666;">Chọn khách hàng thành viên để tích điểm, hoặc để trống cho khách lẻ</small>
+                </div>
+                <div class="form-group">
+                    <label>Tên khách hàng:</label>
+                    <input type="text" id="invoiceCustomerName" placeholder="Nhập tên khách hàng (tùy chọn cho khách lẻ)">
+                </div>
+                <div class="form-group">
+                    <label>Số điện thoại:</label>
+                    <input type="tel" id="invoiceCustomerPhone" placeholder="Nhập số điện thoại (tùy chọn)">
+                </div>
+                <div class="form-group">
+                    <label>Tổng tiền:</label>
+                    <input type="number" id="totalAmount" step="0.01" required>
+                </div>
+                <div class="form-group">
+                    <label>Giảm giá:</label>
+                    <input type="number" id="discount" step="0.01" value="0">
+                </div>
+                <div class="form-group">
+                    <label>Phương thức thanh toán:</label>
+                    <select id="paymentMethod">
+                        <option value="cash">Tiền mặt</option>
+                        <option value="card">Thẻ</option>
+                        <option value="transfer">Chuyển khoản</option>
+                        <option value="qr">Thanh toán QR</option>
+                        <option value="momo">MoMo</option>
+                        <option value="vn_pay">VNPay</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Loại hóa đơn:</label>
+                    <select id="invoiceType">
+                        <option value="store">Tại cửa hàng</option>
+                        <option value="online">Online</option>
+                    </select>
+                </div>
+                <div class="form-actions">
+                    <button type="submit" class="btn btn-primary">Lưu</button>
+                    <button type="button" class="btn btn-secondary" onclick="closeModal('invoiceModal')">Hủy</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Customer Modal -->
+    <div id="customerModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Thêm/Sửa khách hàng thành viên</h3>
+                <span class="close" onclick="closeModal('customerModal')">&times;</span>
+            </div>
+            <form id="customerForm">
+                <input type="hidden" id="customerId">
+                <div class="form-group">
+                    <label>Tên khách hàng:</label>
+                    <input type="text" id="customerName" required>
+                </div>
+                <div class="form-group">
+                    <label>Điện thoại:</label>
+                    <input type="tel" id="customerPhone" required>
+                </div>
+                <div class="form-group">
+                    <label>Email:</label>
+                    <input type="email" id="customerEmail">
+                </div>
+                <div class="form-group">
+                    <label>Ngày sinh:</label>
+                    <input type="date" id="dateOfBirth">
+                </div>
+                <div class="form-group">
+                    <label>Loại khách hàng:</label>
+                    <select id="customerType" required>
+                        <option value="member">Thành viên</option>
+                        <option value="vip">VIP</option>
+                        <option value="online">Online</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Nguồn đăng ký:</label>
+                    <select id="registrationSource">
+                        <option value="store">Tại cửa hàng</option>
+                        <option value="online">Trực tuyến</option>
+                        <option value="app">Ứng dụng</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Điểm tích lũy:</label>
+                    <input type="number" id="loyaltyPoints" value="0" min="0">
+                </div>
+                <div class="form-group">
+                    <label>Trạng thái:</label>
+                    <select id="customerStatus">
+                        <option value="active">Hoạt động</option>
+                        <option value="inactive">Ngưng hoạt động</option>
+                    </select>
+                </div>
+                <div class="form-actions">
+                    <button type="submit" class="btn btn-primary">Lưu</button>
+                    <button type="button" class="btn btn-secondary" onclick="closeModal('customerModal')">Hủy</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Order Modal -->
+    <div id="orderModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Thêm/Sửa đơn hàng online</h3>
+                <span class="close" onclick="closeModal('orderModal')">&times;</span>
+            </div>
+            <form id="orderForm">
+                <input type="hidden" id="orderId">
+                <div class="form-group">
+                    <label>Khách hàng thành viên:</label>
+                    <select id="orderCustomerId" onchange="handleOrderCustomerSelect(this)">
+                        <option value="">Khách lẻ</option>
+                    </select>
+                    <small style="color: #666;">Chọn khách hàng thành viên để tích điểm khi hoàn thành đơn hàng</small>
+                </div>
+                <div class="form-group">
+                    <label>Tên khách hàng:</label>
+                    <input type="text" id="orderCustomerName" required placeholder="Nhập tên khách hàng">
+                </div>
+                <div class="form-group">
+                    <label>Số điện thoại:</label>
+                    <input type="tel" id="orderCustomerPhone" required placeholder="Nhập số điện thoại">
+                </div>
+                <div class="form-group">
+                    <label>Địa chỉ giao hàng:</label>
+                    <textarea id="deliveryAddress" required placeholder="Nhập địa chỉ giao hàng chi tiết"></textarea>
+                </div>
+                <div class="form-group">
+                    <label>Tổng tiền:</label>
+                    <input type="number" id="orderTotalAmount" step="0.01" required>
+                </div>
+                <div class="form-group">
+                    <label>Ghi chú đơn hàng:</label>
+                    <textarea id="orderNote" placeholder="Ghi chú thêm (tùy chọn)"></textarea>
+                </div>
+                <div class="form-group">
+                    <label>Trạng thái:</label>
+                    <select id="orderStatus">
+                        <option value="pending">Chờ xử lý</option>
+                        <option value="preparing">Đang chuẩn bị</option>
+                        <option value="delivering">Đang giao</option>
+                        <option value="completed">Hoàn thành</option>
+                        <option value="cancelled">Đã hủy</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Trạng thái thanh toán:</label>
+                    <select id="paymentStatus">
+                        <option value="unpaid">Chưa thanh toán</option>
+                        <option value="paid">Đã thanh toán</option>
+                    </select>
+                </div>
+                <div class="form-actions">
+                    <button type="submit" class="btn btn-primary">Lưu</button>
+                    <button type="button" class="btn btn-secondary" onclick="closeModal('orderModal')">Hủy</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+
+
+    <script src="assets/js/script.js"></script>
+</body>
+</html>
