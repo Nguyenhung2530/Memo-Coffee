@@ -1,5 +1,6 @@
 <?php
 include '../config/connect.php';
+include '../config/auto_increment_utils.php';
 
 header('Content-Type: application/json');
 
@@ -78,14 +79,23 @@ if ($_SERVER['REQUEST_METHOD'] === 'DELETE') {
         // Xóa vĩnh viễn (chỉ admin)
         $stmt = $conn->prepare("DELETE FROM customer WHERE customer_id=?");
         $stmt->bind_param("i", $data['customer_id']);
+        $stmt->execute();
+        $success = $stmt->affected_rows > 0;
+        
+        // Reset AUTO_INCREMENT sau khi xóa
+        if ($success) {
+            resetTableAutoIncrement($conn, 'customer');
+        }
+        
+        echo json_encode(["success" => $success]);
     } else {
         // Chuyển trạng thái thành inactive
         $stmt = $conn->prepare("UPDATE customer SET status='inactive' WHERE customer_id=?");
         $stmt->bind_param("i", $data['customer_id']);
+        $stmt->execute();
+        echo json_encode(["success" => $stmt->affected_rows > 0]);
     }
     
-    $stmt->execute();
-    echo json_encode(["success" => $stmt->affected_rows > 0]);
     exit;
 }
 ?> 

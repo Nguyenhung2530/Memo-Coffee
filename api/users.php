@@ -1,5 +1,6 @@
 <?php
 include '../config/connect.php';
+include '../config/auto_increment_utils.php';
 
 header('Content-Type: application/json; charset=utf-8');
 
@@ -65,7 +66,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'DELETE') {
     $stmt = $conn->prepare("DELETE FROM user_account WHERE user_id=?");
     $stmt->bind_param("i", $data['user_id']);
     $stmt->execute();
-    echo json_encode(["success" => $stmt->affected_rows > 0], JSON_UNESCAPED_UNICODE);
+    $success = $stmt->affected_rows > 0;
+    
+    // Reset AUTO_INCREMENT sau khi xóa
+    if ($success) {
+        resetTableAutoIncrement($conn, 'user_account');
+    }
+    
+    echo json_encode(["success" => $success], JSON_UNESCAPED_UNICODE);
     exit;
 }
 ?> 

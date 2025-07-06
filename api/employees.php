@@ -1,5 +1,6 @@
 <?php
 include '../config/connect.php';
+include '../config/auto_increment_utils.php';
 
 header('Content-Type: application/json');
 
@@ -51,7 +52,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'DELETE') {
     $stmt = $conn->prepare("DELETE FROM employee WHERE employee_id=?"); // Changed table name
     $stmt->bind_param("i", $data['employee_id']);
     $stmt->execute();
-    echo json_encode(["success" => $stmt->affected_rows > 0]);
+    $success = $stmt->affected_rows > 0;
+    
+    // Reset AUTO_INCREMENT sau khi xóa
+    if ($success) {
+        resetTableAutoIncrement($conn, 'employee');
+    }
+    
+    echo json_encode(["success" => $success]);
     exit;
 }
 ?>
